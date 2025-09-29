@@ -1,6 +1,21 @@
+import { comparePassword, hashPassword } from "../helpers/bcrypt.helper.js";
+import { UserModel } from "../models/mongoose/user.model.js";
+
 export const register = async (req, res) => {
+  const { username, email, password, profile } = req.params;
+
   try {
+    const hash = hashPassword(password);
+
+    const userCreate = await UserModel.create({
+      username,
+      email,
+      password: hashPassword,
+      profile,
+    });
+
     // TODO: crear usuario con password hasheada y profile embebido
+
     return res.status(201).json({ msg: "Usuario registrado correctamente" });
   } catch (error) {
     console.log(error);
@@ -9,7 +24,13 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
+  const { email, password } = req.body;
   try {
+    const user = await UserModel.findOne({ email: email });
+
+    const autenticacion = await comparePassword(password);
+    if (!autenticacion)
+      return res.status(400).json({ msg: "contraseña incorrecta" });
     // TODO: buscar user, validar password, firmar JWT y setear cookie httpOnly
     return res.status(200).json({ msg: "Usuario logueado correctamente" });
   } catch (error) {

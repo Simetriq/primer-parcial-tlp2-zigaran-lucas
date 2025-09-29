@@ -27,7 +27,10 @@ const UserSchema = new Schema(
       phone: { type: String, require: false },
     },
   },
-  { timestamps: true }
+  {
+    deletedAt: true,
+    timestamps: true,
+  }
 );
 
 // ! FALTA COMPLETAR ACA

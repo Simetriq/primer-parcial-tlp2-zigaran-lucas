@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { CategoryModel } from "./category.model.js";
 
 // TODO: completar relaciones embebidas y referenciadas
 
@@ -35,5 +36,14 @@ const AssetSchema = new Schema(
   },
   { timestamps: true }
 );
+
+AssetSchema.pre("findOneAndDelete", async function (next) {
+  const filter = this.getQuery();
+
+  const asset = await this.model.findOne(filter);
+  if (asset) await CategoryModel.deleteMany({ asset: asset._id });
+
+  next();
+});
 
 export const AssetModel = model("Asset", AssetSchema);
