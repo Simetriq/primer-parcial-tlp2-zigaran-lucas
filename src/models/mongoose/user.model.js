@@ -20,6 +20,12 @@ const UserSchema = new Schema(
     },
     deletedAt: { type: Date, default: null },
     // ! FALTA COMPLETAR ACA
+    profile: {
+      employee_number: { type: String, unique: true, required: true },
+      first_name: { type: String, require: true, minLength: 2, maxLength: 50 },
+      last_name: { type: String, require: true, minLength: 2, maxLength: 50 },
+      phone: { type: String, require: false },
+    },
   },
   { timestamps: true }
 );
